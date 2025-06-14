@@ -1,0 +1,125 @@
+下次如何正确启动项目：
+	首先，确保你在项目目录下：
+	cd d:\visual_ProgrammingSoftware\Projects\multibot-chat
+激活虚拟环境：
+	.venv\Scripts\activate
+	(你会看到命令提示符前面出现 (.venv))
+
+重要：必须先启动后端API服务，再启动前端！
+
+启动后端API服务：
+	# 打开一个新的命令行窗口
+	cd d:\visual_ProgrammingSoftware\Projects\multibot-chat
+	.venv\Scripts\activate
+	# 启动后端API服务（运行在端口8000上）
+	uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+然后在另一个命令行窗口中启动前端：
+	cd d:\visual_ProgrammingSoftware\Projects\multibot-chat
+	.venv\Scripts\activate
+	streamlit run app.py
+
+或者使用完整路径运行：
+	streamlit run d:\visual_ProgrammingSoftware\Projects\multibot-chat\app.py
+
+本地 URL: http://localhost:8501
+网络 URL: http://172.26.150.228:8501
+
+注意：如果看到"后端服务未启动"的警告，请检查后端API服务是否正在运行。
+
+########################################################################################
+
+
+当前看到的界面是 MultiBot-Chat 的主页面，这个界面的代码主要分布在以下几个文件中：
+
+app.py - 这是应用程序的主入口文件，它负责：
+设置页面配置和标题
+加载 CSS 样式
+处理用户登录状态
+根据当前页面状态加载不同的页面组件
+custom_pages/main_page.py - 这是您当前看到的主页面的核心代码，它负责：
+显示"开始对话吧"的标题和说明
+创建聊天输入框
+显示新话题按钮
+显示已启用的机器人对话界面
+custom_pages/utils/sidebar.py - 这是侧边栏的代码，负责显示：
+用户信息
+机器人设置
+本地私人助手选项
+退出登录按钮等
+custom_pages/utils/welcome_message.py - 显示欢迎信息
+custom_pages/utils/bot_display.py - 负责显示活跃和非活跃的机器人对话界面
+如果您想修改当前看到的主页面，主要需要编辑 custom_pages/main_page.py 文件。如果您想修改侧边栏，则需要编辑 custom_pages/utils/sidebar.py 文件。
+
+我们已经成功地将你的项目更新推送到了GitHub上。让我总结一下我们刚才完成的操作：
+
+我们首先检查了Git仓库的状态，发现有几个文件被修改
+我们将这些修改添加到了暂存区 (git add .)
+我们提交了这些更改 (git commit -m "更新项目版本")
+我们更新了远程仓库的URL，移除了过期的令牌
+我们成功地将更改推送到了GitHub (git push)
+下次如果你想再次提交新版本，只需按照以下步骤操作：
+查看更改状态：
+CopyInsert
+git status
+添加更改的文件：
+CopyInsert
+git add .
+或者添加特定文件：
+CopyInsert
+git add 文件名
+提交更改：
+CopyInsert
+git commit -m "提交说明"
+(在引号中写上你对这次更改的简短描述)
+推送到GitHub：
+CopyInsert
+git push
+
+核心文件
+app.py - 主程序入口，Streamlit应用的核心逻辑
+config.py - 配置文件，存储API密钥等敏感信息
+requirements.txt - Python依赖包列表
+机器人相关
+bot/ - 存放不同聊天机器人的实现代码
+tools/ - 辅助工具和功能模块
+前端相关
+.streamlit/ - Streamlit配置文件
+static/ - 静态资源文件(图片/CSS等)
+custom_pages/ - 自定义页面组件
+部署相关
+start_server.bat/.sh - 启动脚本
+.gitignore - Git忽略规则
+LICENSE - 开源许可证
+README.md - 项目说明文档
+用户数据
+user_config/ - 用户个性化配置
+users.json - 用户账号信息
+开发环境
+.venv/ - Python虚拟环境
+__pycache__/ - Python缓存文件
+版本控制
+.git/ - Git版本库
+.gitee/ - Gitee平台相关配置
+
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8080 --reload
+
+关于多机器人只有一个回答的问题：
+当你在群聊模式下发消息时，系统使用了一个叫做"chat_pilot"的工具来决定由哪个机器人来回答你的问题。日志显示：
+
+工具模块选择了"智谱"这个机器人来回答你的问题：
+
+"正在调用工具模块"是什么意思：
+这个系统设计了一个工具机制，可以让主要的对话管理器调用不同的功能模块
+在这个例子中，系统调用了"chat_pilot"工具模块，这个模块负责决定由哪个机器人回答问题
+它通过分析你的提问("介绍一下你自己")，决定让"智谱"机器人来回答
+
+工具调用的流程：
+首先系统使用本地的Ollama模型(qwen2.5:3b)分析你的问题：
+
+然后决定调用ID为"1619815b-8c24-4d32-b527-c22ce6f37947"的机器人(智谱)：
+
+最后向智谱API发送请求并获取回答：
+
+如果你想让多个机器人同时回答同一个问题，你可能需要修改"chat_pilot"工具的行为。在当前设计中，这个工具会选择最合适的一个机器人来回答，而不是让所有机器人都回答。
+这是系统工作方式的一部分，通过使用本地的引导模型(qwen2.5:3b)来决定将用户的问题路由给哪个机器人，这种设计可以提高回答的质量和效率。
